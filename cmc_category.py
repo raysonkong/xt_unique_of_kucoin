@@ -81,9 +81,11 @@ response = session.get(URLCATEGORIES, params=parameters)
 parsed_response = response.json()['data']
 
 categoryId = ''
+officalName=''
 
 for item in parsed_response:
-    if item['name'] == CATEGORY:
+    if item['name'].lower().replace(" ", "") == CATEGORY.lower().replace(" ", ""):
+        officalName = item['name']
         categoryId = item['id']
 
 ## success!
@@ -191,7 +193,7 @@ grouped_pairs = group_into_n(tradingview_pairs, n)
 # /Users/raysonkong/code/python/webscrapping/scripts_v2/cmc_api_to_tradingview/outputs
 def output_to_text_file(nested_grouped_pairs):
     for idx, group in enumerate(nested_grouped_pairs):
-            filename=f"{os.getcwd()}/CMC_{CATEGORY}_{generation_date}total{HOW_MANY_COINS}/-0.1 {CATEGORY} CMC p.{idx+1} ({generation_date}).txt"
+            filename=f"{os.getcwd()}/CMC_{officalName}_{generation_date}total{HOW_MANY_COINS}/-0.1 {officalName} CMC p.{idx+1} ({generation_date}).txt"
             os.makedirs(os.path.dirname(filename), exist_ok=True)
             with open(filename, "w") as f:
                 for pair in group:
