@@ -75,13 +75,15 @@ parameters = {
 
 # Get Gategory ID
 response = session.get(URLCATEGORIES, params=parameters)
+
+#print("==== Category Name =====")
 #pprint.pprint(json.loads(response.text)['data'])
 parsed_response = response.json()['data']
 
 categoryId = ''
 
 for item in parsed_response:
-    if item['title'] == CATEGORY:
+    if item['name'] == CATEGORY:
         categoryId = item['id']
 
 ## success!
