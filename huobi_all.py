@@ -128,11 +128,10 @@ def output_to_text_file(nested_grouped_pairs):
 
 
 def run_srapper():
-    os.system('clear')
     output_to_text_file(grouped_pairs)
 
 
-    print("== CMC Scrapping Completed ==")
+    print("== Huobi All Tickers Retrieved ==")
     print('\n')
     #print("======================================================")
 if __name__ =='__main__':
