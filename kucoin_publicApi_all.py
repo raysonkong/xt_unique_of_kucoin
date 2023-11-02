@@ -16,7 +16,6 @@ SLEEP_TIME = 0.2
 
 
 # EXCHANGES=["HUOBI"]  # only one
-
 # WANTED_CURRENCIES = ['USDT', 'BTC'] 
 
 
@@ -51,39 +50,69 @@ current_time = time.strftime("%H:%M:%S", t)
 response = requests.get(URL)
 #print(response.json())
 
-coins = response.json()['data']
+coins = response.json()['data']['ticker']
 
-#print(coins[0]['base-currency'])
+#print(coins[0])
 
-# base-currency, quote-currency ( usdt or btc)
-
-
-#print(parsed_response2)
+# Result of print(coins[0])
+# {'symbol': 'NKN-USDT', 'symbolName': 'NKN-USDT', ....etc}
 
 
-# #================================================ # 
-# # Step 1 #
-# # Turn Json response to a list of symbols
-# # output: [ 'BTC', "ETH", ...] 
-# # ============================================== ### 
+### ====== Helper Parse Function ========###
+## helper to turn 'NKN-USDT' to NKN
+### ====================================### 
 
-#print(coins)
+def extract_currency_symbol(pair):
+    return pair.split('-')[0]
+
+#test = 'NKN-USDT'
+#currency_name_only = extract_currency_symbol(test)
+#print(currency_name_only)
+
+
+
+# # #================================================ # 
+# # # Turn Json response to a list of symbols
+# # # output: [ 'BTC', "ETH", ...] 
+
+### Requirements
+### return an array named symbols
+# # # ============================================== ### 
+
+def checkCoin(pair):
+    if 'up-usdt' in pair.lower():
+        return False
+    elif 'down-usdt' in pair.lower():
+        return False
+    else: return True
+
+
 symbols = []
-
 for coin in coins:
-    #print(coin['base-currency'])
-    for wanted in WANTED_CURRENCIES:
-        if coin['quote-currency'].lower() == wanted.lower():
-            symbols.append(EXCHANGES[0] + ":" + coin['base-currency'].upper() + coin['quote-currency'].upper())
-
+    currency_pair = coin['symbol']
+    #print(currency_pair)
+    if currency_pair[-4:] == WANTED_CURRENCIES[0] and checkCoin(currency_pair):
+        symbols.append(extract_currency_symbol(currency_pair.replace('-', '')))
 
 #print(symbols)
 
 
+##============================####
+## Printing Logic ####### 
+# You should not touch the code below
+
+##============================#####
+
+
+
 #================================================
-# Step 4 #
-# Group output from step 3
-# to a list containing lists of n 
+##$ Helper Function to Group #### 
+# Group output from Last Step
+# to a list containing lists of n
+
+###    Requirements   ###
+# Takes in symbols (from last step) and n
+# output grouped_pairs 
 # =============================================== ### 
 
 # Group size, in production n=400
@@ -98,6 +127,7 @@ def group_into_n(data_list, n):
 grouped_pairs = group_into_n(symbols, n)
 
 #print(grouped_pairs)
+
 
 
 #================================================
@@ -131,7 +161,7 @@ def run_srapper():
     output_to_text_file(grouped_pairs)
 
 
-    print("== Huobi All Tickers Retrieved ==")
+    print("== Kucoin PublicApi All Tickers Retrieved ==")
     print('\n')
     #print("======================================================")
 if __name__ =='__main__':
