@@ -14,16 +14,17 @@ SLEEP_TIME = 0.2
 ## ==================================##
 
 
+# EXCHANGES=["KUCOIN"]  # only one
 
-# EXCHANGES=["HUOBI"]  # only one
-# WANTED_CURRENCIES = ['USDT', 'BTC'] 
+# WANTED_CURRENCIES = ['USDT'] # for now just use one 
 
 
 
 # # # Do not alter below easily
 # GROUP_SIZE = len(EXCHANGES) * 1000
 
-# URL = 'https://api.huobi.pro/v1/common/symbols'
+# URL = 'https://api.kucoin.com/api/v1/market/allTickers'
+
 # ## end of Config file
 
 
