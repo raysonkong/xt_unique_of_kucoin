@@ -93,7 +93,7 @@ for coin in coins:
     currency_pair = coin['symbol']
     #print(currency_pair)
     if currency_pair[-4:] == WANTED_CURRENCIES[0] and checkCoin(currency_pair):
-        symbols.append(extract_currency_symbol(currency_pair.replace('-', '')))
+        symbols.append(EXCHANGES[0]+ ':' + extract_currency_symbol(currency_pair.replace('-', '')))
 
 #print(symbols)
 
