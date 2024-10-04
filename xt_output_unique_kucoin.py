@@ -88,14 +88,34 @@ def checkCoin(pair):
     else: return True
 
 
-symbols = []
+kucoin_symbols = []
 for coin in coins:
     currency_pair = coin['symbol']
     #print(currency_pair)
     if currency_pair[-4:] == WANTED_CURRENCIES[0] and checkCoin(currency_pair):
-        symbols.append(EXCHANGES[0]+ ':' + extract_currency_symbol(currency_pair.replace('-', '')))
+        kucoin_symbols.append(extract_currency_symbol(currency_pair.replace('-', '')).upper())
 
-#print(symbols)
+#print(kucoin_symbols)
+
+####=== Calling the XT APi === ###
+
+response_xt = requests.get(URL_XT)
+#print(response_xt.json())
+
+coins_xt = response_xt.json()["result"]
+
+xt_symbols = []
+for coin in coins_xt:
+    xt_symbols.append(coin['s'].replace('_', '').upper())
+
+#print(xt_symbols)
+
+unique_to_xt = list(set(xt_symbols) - set(kucoin_symbols))
+
+#print((unique_to_xt))
+
+
+
 
 
 ##============================####
@@ -103,7 +123,6 @@ for coin in coins:
 # You should not touch the code below
 
 ##============================#####
-
 
 
 #================================================
@@ -125,9 +144,9 @@ def group_into_n(data_list, n):
 #test = [1,2,3,4,5,6,7,8]
 #print(group_into_n(test, n))
 
-grouped_pairs = group_into_n(symbols, n)
+grouped_pairs = group_into_n(unique_to_xt, n)
 
-#print(grouped_pairs)
+print(grouped_pairs)
 
 
 
@@ -149,7 +168,7 @@ grouped_pairs = group_into_n(symbols, n)
 # /Users/raysonkong/code/python/webscrapping/scripts_v2/cmc_api_to_tradingview/outputs
 def output_to_text_file(nested_grouped_pairs):
     for idx, group in enumerate(nested_grouped_pairs):
-            filename=f"{os.getcwd()}/{EXCHANGES[0]}_ALL_{generation_date}total{len(symbols)}/-0.4 {EXCHANGES[0]}_ALL p.{idx+1} ({generation_date}).txt"
+            filename=f"{os.getcwd()}/XT_Unique_ALL_{generation_date}total{len(unique_to_xt)}/-0.4 {EXCHANGES[0]}_ALL p.{idx+1} ({generation_date}).txt"
             os.makedirs(os.path.dirname(filename), exist_ok=True)
             with open(filename, "w") as f:
                 for pair in group:
@@ -162,7 +181,7 @@ def run_srapper():
     output_to_text_file(grouped_pairs)
 
 
-    print("== Kucoin PublicApi All Tickers Retrieved ==")
+    print("== XT Output Unique of Kucoin Retrieved ==")
     print('\n')
     #print("======================================================")
 if __name__ =='__main__':
